@@ -40,7 +40,7 @@ function HomePage() {
                 <img src="https://plus.unsplash.com/premium_photo-1671198905435-20f8d166efb2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dmludGFnZSUyMGNsb3RoaW5nfGVufDB8fDB8fHww" className="card-img-top" alt="Feature One"/>
                 <div className="card-body">
                   <h4 className="card-title">Product Details</h4>
-                  <p className="card-text">Description of feature one. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  <p className="card-text"> Manage your product listings, update product details, and oversee product categorization.</p>
                 </div>
               </div>
             </div>
@@ -50,7 +50,7 @@ function HomePage() {
                 <img src="https://www.panaprium.com/cdn/shop/articles/online_thrift_store_vintage_fashion_1000.jpg?v=1638333789" className="card-img-top" alt="Feature Two"/>
                 <div className="card-body">
                   <h4 className="card-title">Inventory Details</h4>
-                  <p className="card-text">Description of feature two. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  <p className="card-text">Monitor and manage stock levels and generate reports to maintain inventory levels.</p>
                 </div>
               </div>
             </div>
@@ -60,7 +60,7 @@ function HomePage() {
                 <img src="https://img.freepik.com/premium-photo/beautiful-womens-clothing-store-new-summer-products_943281-27240.jpg" className="card-img-top" alt="Feature Three"/>
                 <div className="card-body">
                   <h4 className="card-title">Order Details</h4>
-                  <p className="card-text">Description of feature three. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                  <p className="card-text">Oversee orders and handle returns and exchanges to ensure a order fulfillment process.</p>
                 </div>
               </div>
             </div>
