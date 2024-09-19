@@ -1,0 +1,8 @@
+.nav-link:hover {
+    color: #176ec5; /* Change text color on hover */
+     /* Background color on hover */
+  }
+  
+  .nav-link.active {
+    color: #007bff; /* Active link color */
+  }

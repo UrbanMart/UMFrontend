@@ -1,0 +1,39 @@
+.footer {
+    background-color: #e3f2fd;
+  }
+  
+  .footer .btn-outline {
+    border-color: #007bff;
+    color: #007bff;
+  }
+  
+  .footer .btn-outline:hover {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .footer .form-outline .form-label {
+    color: #007bff;
+  }
+  
+  .footer .text-body {
+    color: #007bff;
+  }
+  
+  .footer .text-uppercase {
+    text-transform: uppercase;
+  }
+  
+  .footer .list-unstyled li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .footer .list-unstyled li a {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .footer .list-unstyled li a:hover {
+    color: #007bff;
+  }
+  
