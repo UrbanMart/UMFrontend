@@ -9,7 +9,7 @@ function HomePage() {
 
     const cardStyle = {
         boxShadow: '0 4px 8px rgba(0.2, 0.2, 0.2, 0.2)', // Customize the shadow as needed
-      };
+    };
       
   return (
     <div>
@@ -21,8 +21,7 @@ function HomePage() {
           backgroundImage:`url(${"https://media.burford.co.uk/images/SNY04089.jpg_edit.width-1440_05001m7uKQ0crRoI.jpg"})`, // Replace with the path to your image
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          
-          Height: 'auto', // Adjust height as needed
+          height: 'auto', // Adjust height as needed
           overflow: 'hidden',
           backgroundRepeat: 'no-repeat'
         }}
@@ -36,46 +35,76 @@ function HomePage() {
       {/* Features Section */}
       <section id="features" className="py-5">
         <div className="container">
+          {/* First Row of Cards */}
           <div className="row text-center">
-            {/* Card 1 */}
+            {/* Card 1: Product Details */}
             <div className="col-md-4 mb-4">
-            <Link to="/product" style={{ textDecoration: 'none', color: 'inherit' }}>  {/* Wrap the card in a Link */}
+              <Link to="/product" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className="card border-light shadow-sm" style={cardStyle}>
-                  <img src="https://plus.unsplash.com/premium_photo-1671198905435-20f8d166efb2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dmludGFnZSUyMGNsb3RoaW5nfGVufDB8fDB8fHww" className="card-img-top" alt="Feature One"/>
+                  <img src="https://plus.unsplash.com/premium_photo-1671198905435-20f8d166efb2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3" className="card-img-top" alt="Feature One"/>
                   <div className="card-body">
                     <h4 className="card-title">Product Details</h4>
-                    <p className="card-text"> Manage your product listings, update product details, and oversee product categorization.</p>
+                    <p className="card-text">Manage your product listings, update product details, and oversee product categorization.</p>
                   </div>
                 </div>
               </Link>
             </div>
-            {/* Card 2 */}
+            {/* Card 2: Inventory Details */}
             <div className="col-md-4 mb-4">
-            <Link to="/inventory" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div className="card border-light shadow-sm" style={cardStyle}>
-                <img src="https://www.panaprium.com/cdn/shop/articles/online_thrift_store_vintage_fashion_1000.jpg?v=1638333789" className="card-img-top" alt="Feature Two"/>
-                <div className="card-body">
-                  <h4 className="card-title">Inventory Details</h4>
-                  <p className="card-text">Monitor and manage stock levels and generate reports to maintain inventory levels.</p>
+              <Link to="/inventory" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="card border-light shadow-sm" style={cardStyle}>
+                  <img src="https://www.panaprium.com/cdn/shop/articles/online_thrift_store_vintage_fashion_1000.jpg?v=1638333789" className="card-img-top" alt="Feature Two"/>
+                  <div className="card-body">
+                    <h4 className="card-title">Inventory Details</h4>
+                    <p className="card-text">Monitor and manage stock levels and generate reports to maintain inventory levels.</p>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
             </div>
-            {/* Card 3 */}
+            {/* Card 3: Order Details */}
             <div className="col-md-4 mb-4">
-            <Link to="/order" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <div className="card border-light shadow-sm" style={cardStyle}>
-                <img src="https://img.freepik.com/premium-photo/beautiful-womens-clothing-store-new-summer-products_943281-27240.jpg" className="card-img-top" alt="Feature Three"/>
-                <div className="card-body">
-                  <h4 className="card-title">Order Details</h4>
-                  <p className="card-text">Oversee orders and handle returns and exchanges to ensure a order fulfillment process.</p>
+              <Link to="/order" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="card border-light shadow-sm" style={cardStyle}>
+                  <img src="https://img.freepik.com/premium-photo/beautiful-womens-clothing-store-new-summer-products_943281-27240.jpg" className="card-img-top" alt="Feature Three"/>
+                  <div className="card-body">
+                    <h4 className="card-title">Order Details</h4>
+                    <p className="card-text">Oversee orders and handle returns and exchanges to ensure smooth order fulfillment.</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Second Row of Cards (Centered) */}
+          <div className="row justify-content-center text-center">
+            {/* Card 4: User Management */}
+            <div className="col-md-4 mb-4">
+              <Link to="/user" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="card border-light shadow-sm" style={cardStyle}>
+                  <img src="https://milgrasp.com/img/sections/features/user_management2.jpg" className="card-img-top" alt="User Management"/>
+                  <div className="card-body">
+                    <h4 className="card-title">User Management</h4>
+                    <p className="card-text">Manage user roles, permissions, and access rights to ensure secure user management.</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+            {/* Card 5: Notification Management */}
+            <div className="col-md-4 mb-4">
+              <Link to="/notification" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="card border-light shadow-sm" style={cardStyle}>
+                  <img src="https://www.koombea.com/wp-content/uploads/2023/01/push-notification-as-a-service-banner@2x-800x445.webp" className="card-img-top" alt="Notification Management"/>
+                  <div className="card-body">
+                    <h4 className="card-title">Notification Management</h4>
+                    <p className="card-text">Configure and manage notifications to stay updated with important alerts and messages.</p>
+                  </div>
+                </div>
               </Link>
             </div>
           </div>
         </div>
       </section>
+
       <Footer/>
     </div>
   );

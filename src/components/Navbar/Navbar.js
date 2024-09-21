@@ -24,18 +24,28 @@ function Navbar() {
         </a>
         <ul className="navbar-nav">
           <li className="nav-item">
-            <a className="nav-link"  href="#" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
+            <a className="nav-link"  href="/product" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
               PRODUCTS
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
+            <a className="nav-link" href="/inventory" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
               INVENTORY
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
+            <a className="nav-link" href="/order" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
               ORDERS
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/notification" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
+              NOTIFICATIONS
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/user" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
+              USERS
             </a>
           </li>
           {user ? (
