@@ -1,4 +1,4 @@
-import React from 'react';
+import React , { useEffect }from 'react';
 import logo from '../../Assets/logo.png'
 import "../../components/Navbar/Navbar.css"
 import { Link, useNavigate } from 'react-router-dom'; 
@@ -13,11 +13,11 @@ function Navbar() {
     localStorage.removeItem('user'); 
     navigate('/');  
   };
-
+  
   return (
     <nav className="navbar navbar-light navbar-expand" style={{ backgroundColor: '#e3f2fd',boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
       <div className="container-fluid">
-        <a className="navbar-brand" href="#" style={{ marginLeft:'100px'}}>
+        <a className="navbar-brand" href="#" style={{ marginLeft:'50px'}}>
           <Link to="/">
           <img src={logo} style={{width:"200px",boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'}}/>
           </Link>
@@ -44,6 +44,11 @@ function Navbar() {
             </a>
           </li>
           <li className="nav-item">
+            <a className="nav-link" href="/feedback" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
+              FEEDBACKS
+            </a>
+          </li>
+          <li className="nav-item">
             <a className="nav-link" href="/user" style={{fontSize:"large",fontWeight: "bold", marginRight:'30px'}}>
               USERS
             </a>
@@ -53,12 +58,13 @@ function Navbar() {
               <li className="nav-item">
                 <span className="nav-link" style={{ fontSize: "large", fontWeight: "bold", marginRight: '30px' }}>
                   {`Hello, ${user.name}`} {/* Display username */}
+                 
                 </span>
               </li>
               <li className="nav-item">
                 <button
                   className="nav-link btn"
-                  style={{ fontSize: "large", fontWeight: "bold", marginRight: '100px' }}
+                  style={{ fontSize: "large", fontWeight: "bold", marginRight: '50px' }}
                   onClick={handleLogout}
                 >
                   LOGOUT

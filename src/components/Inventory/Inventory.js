@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { API_BASE_URL } from '../../config';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
-import './Inventory.css'; // Assuming you add your CSS here
+import './Inventory.css'; 
 
 const App = () => {
   const [inventories, setInventories] = useState([]);
@@ -20,7 +20,8 @@ const App = () => {
     vendorId: ''
   });
 
-  // Fetch the list of inventory items from the backend
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const fetchInventories = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/ProductInventory`);
@@ -82,8 +83,10 @@ const App = () => {
   return (
     <div className="app-container">
       <Navbar/>
+     
       <Container className="flex-grow-1">
         <Row>
+
           <Col className="text-center my-4">
             <Button onClick={() => setShowModal(true)} style={{ float: "left" }}>
               Add New Inventory
@@ -209,6 +212,7 @@ const App = () => {
           </Modal.Footer>
         </Modal>
       </Container>
+     
       <Footer />
     </div>
   );

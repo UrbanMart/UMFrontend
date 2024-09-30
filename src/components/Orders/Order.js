@@ -59,6 +59,11 @@ const OrderManagement = () => {
 
   // Edit existing order
   const editOrder = (order) => {
+    // Prevent editing if the order is already dispatched
+    if (order.status === 'Dispatched' || order.status === 'Delivered') {
+      alert('This order cannot be edited because it has already been dispatched.');
+      return;
+    }
     setEditingOrder(order);
     setNewOrder(order);
     setShowModal(true);
@@ -66,6 +71,10 @@ const OrderManagement = () => {
 
   // Update existing order
   const updateOrder = async () => {
+    if (newOrder.status === 'Dispatched' || newOrder.status === 'Delivered') {
+      alert('Order cannot be updated as it has already been dispatched or delivered.');
+      return;
+    }
     try {
       await axios.put(`${API_BASE_URL}/api/Orders/${editingOrder.id}`, newOrder);
       setShowModal(false);
@@ -76,7 +85,11 @@ const OrderManagement = () => {
   };
 
   // Delete an order
-  const deleteOrder = async (id) => {
+  const deleteOrder = async (id, status) => {
+    if (status === 'Dispatched' || status === 'Delivered') {
+      alert('Order cannot be deleted as it has already been dispatched or delivered.');
+      return;
+    }
     try {
       await axios.delete(`${API_BASE_URL}/api/Orders/${id}`);
       fetchOrders();
@@ -84,6 +97,7 @@ const OrderManagement = () => {
       console.error('Error deleting order:', error);
     }
   };
+  
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -116,10 +130,18 @@ const OrderManagement = () => {
                     <td>{order.totalAmount}</td>
                     <td>{order.status}</td>
                     <td>
-                      <Button variant="warning" onClick={() => editOrder(order)}>
+                      <Button
+                        variant="warning"
+                        onClick={() => editOrder(order)}
+                        disabled={order.status === 'Dispatched' || order.status === 'Delivered'}
+                      >
                         Edit
                       </Button>{' '}
-                      <Button variant="danger" onClick={() => deleteOrder(order.id)}>
+                      <Button
+                        variant="danger"
+                        onClick={() => deleteOrder(order.id, order.status)}
+                        disabled={order.status === 'Dispatched' || order.status === 'Delivered'}
+                      >
                         Delete
                       </Button>
                     </td>
@@ -170,13 +192,20 @@ const OrderManagement = () => {
               <Form.Group>
                 <Form.Label>Status</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="select"
                   name="status"
                   value={newOrder.status}
                   onChange={handleInputChange}
-                />
+                  disabled={editingOrder && editingOrder.status === 'Dispatched'}
+                >
+                  <option value="Processing">Processing</option>
+                  <option value="Dispatched">Dispatched</option>
+                  <option value="Delivered">Delivered</option>
+                  <option value="Cancelled">Cancelled</option>
+                </Form.Control>
               </Form.Group>
 
+              {/* Order Items */}
               <Form.Label>Order Items</Form.Label>
               {newOrder.orderItems.map((item, index) => (
                 <div key={index}>

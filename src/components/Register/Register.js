@@ -91,7 +91,6 @@ const Register = () => {
           <Form.Group controlId="formRole" className="mb-3">
             <Form.Label>Role</Form.Label>
             <Form.Select name="role" value={user.role} onChange={handleChange}>
-              <option value="Vendor">Vendor</option>
               <option value="Administrator">Administrator</option>
               <option value="CSR">Customer Service Representative</option>
             </Form.Select>

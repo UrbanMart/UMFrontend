@@ -84,7 +84,7 @@ const UserManagement = () => {
         <Row className="mt-4">
           <Col className="text-center">
             <Button onClick={() => { setShowModal(true); setNewUser({ email: '', password: '', role: '', isActive: true, name: '' }); }} style={{ float: 'left', marginBottom: "10px" }}>
-              Add New User
+              Add New Vendor
             </Button>
           </Col>
         </Row>
@@ -152,12 +152,18 @@ const UserManagement = () => {
               <Form.Group>
                 <Form.Label>Role</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="select" // Change input type to select
                   name="role"
-                  value={newUser.role}
-                  onChange={handleInputChange}
-                />
+                  value={newUser.role} // Bind value to newUser.role
+                  onChange={handleInputChange} // Handle input change
+                  required // Make it required if needed
+                >
+                 
+                  <option value="Vendor">Vendor</option>
+                 
+                </Form.Control>
               </Form.Group>
+
 
               <Form.Group>
                 <Form.Label>Status</Form.Label>

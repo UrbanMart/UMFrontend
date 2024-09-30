@@ -101,6 +101,17 @@ function HomePage() {
                 </div>
               </Link>
             </div>
+            <div className="col-md-4 mb-4">
+              <Link to="/feedback" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <div className="card border-light shadow-sm" style={cardStyle}>
+                  <img src="https://actiosoftware.com/wp-content/uploads/2024/02/resposta-do-smiley-do-cliente-do-feedback-da-avaliacao-1.jpg" className="card-img-top" alt="Notification Management"/>
+                  <div className="card-body">
+                    <h4 className="card-title">Feedback Management</h4>
+                    <p className="card-text">Configure and manage feedback to stay updated with user feedbacks.</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
