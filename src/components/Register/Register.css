@@ -1,0 +1,36 @@
+/* Ensure the page takes the full height of the viewport */
+.register-page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Full height */
+  }
+  
+  /* Center the content wrap both vertically and horizontally */
+  .content-wrap {
+    display: flex;
+    flex-direction: column; /* Arrange items vertically */
+    justify-content: center; /* Vertically center the content */
+    align-items: center;     /* Horizontally center the content */
+    flex: 1; /* Takes the remaining space between navbar and footer */
+    padding: 20px;
+  }
+  
+  /* Styling for the form container */
+  form {
+    width: 100%;
+    max-width: 400px; /* Set a maximum width for the registration form */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+  }
+  
+  /* Footer stays at the bottom */
+  footer {
+    margin-top: auto;
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  }
+  

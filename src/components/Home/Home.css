@@ -64,3 +64,13 @@
     opacity: 0.8; /* Slightly reduce image opacity on hover */
   }
   
+  /* Home.css */
+.card {
+  height: 100%; /* Ensure cards take equal height */
+}
+
+.card-img-top {
+  width: 100%; /* Make the image take full width of the card */
+  height: 250px; /* Set a fixed height for all images */
+  object-fit: cover; /* Ensure the images are properly cropped to fit the defined size */
+}
