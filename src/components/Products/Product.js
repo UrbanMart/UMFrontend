@@ -8,18 +8,13 @@ import Footer from '../Footer/Footer';
 
 const App = () => {
   const [products, setProducts] = useState([]);
-  const [product, setProduct] = useState({ name: '', price: '', category: '', imageUrl: '', isActive: false, vendorId: '' });
+  const [product, setProduct] = useState({ name: '', price: 0.0, category: '', imageUrl: '', isActive: false, vendorId: '' });
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [vendors, setVendors] = useState([]);
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    price: '',
-    vendorId: '', 
-  });
 
   useEffect(() => {
     fetchProducts();
@@ -40,16 +35,19 @@ const App = () => {
   // Handle form input change
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setProduct({ ...product, [name]: type === 'checkbox' ? checked : value });
   };
 
   // Handle creating a new product
   const handleCreateProduct = async (e) => {
     e.preventDefault();
+    console.log(product)
     try {
       const response = await axios.post(`${API_BASE_URL}/api/products`, product);
       setSuccess('Product created successfully');
-      setProducts([...products, response.data]); // Add the new product to the state
+      setProducts([...products, response.data]);
+  // Add the new product to the state
       resetForm();
     } catch (error) {
       setError('Error creating product');
@@ -96,7 +94,7 @@ const App = () => {
       category: product.category,
       imageUrl: product.imageUrl,
       isActive: product.isActive,
-      vendorId: product.vendorId, // Pre-fill the vendorId
+      vendorId: product.vendorId, 
     });
     setEditMode(true);
     setShowModal(true);
@@ -122,9 +120,16 @@ const App = () => {
   const handleToggleActive = async (id, isActive) => {
     if (user?.role === 'Administrator') {
       try {
-        await axios.patch(`${API_BASE_URL}/api/products/${id}`, { isActive: !isActive });
-        setSuccess(`Product ${!isActive ? 'activated' : 'deactivated'} successfully`);
-        fetchProducts(); // Re-fetch products to update the status
+        if (isActive) {
+          // Call Deactivate API
+          await axios.patch(`${API_BASE_URL}/api/products/${id}/deactivate`);
+          setSuccess('Product deactivated successfully');
+        } else {
+          // Call Activate API
+          await axios.patch(`${API_BASE_URL}/api/products/${id}/activate`);
+          setSuccess('Product activated successfully');
+        }
+        fetchProducts(); // Re-fetch the products after status change
       } catch (error) {
         setError('Error updating product status');
       }
@@ -135,7 +140,7 @@ const App = () => {
 
   // Reset form fields
   const resetForm = () => {
-    setProduct({ name: '', price: '', category: '', imageUrl: '', isActive: false, vendorId: '' });
+    setProduct({ name: '', price: 0.0, category: '', imageUrl: '', isActive: false, vendorId: '' });
     setSelectedProductId(null);
     setError('');
     setSuccess('');
@@ -161,7 +166,7 @@ const App = () => {
         <Table striped bordered hover>
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Product Name</th>
               <th>Price</th>
               <th>Category</th>
               <th>Image URL</th>
@@ -184,9 +189,9 @@ const App = () => {
                       <Button
                         variant={prod.isActive ? 'danger' : 'success'}
                         className="ms-2"
-                        onClick={() => handleToggleActive(prod.id, prod.isActive)}
+                        onClick={() => handleToggleActive(prod.id, prod.isActive)}  // onClick event triggers activation/deactivation
                       >
-                        {prod.isActive ? 'Deactivate' : 'Activate'}
+                        {prod.isActive ? 'Deactivate' : 'Activate'}  
                       </Button>
                     )}
                   </td>
@@ -273,7 +278,7 @@ const App = () => {
                 <Form.Control
                   as="select"
                   name="vendorId"
-                  value={newProduct.vendorId}
+                  value={product.vendorId}
                   onChange={handleInputChange}
                 >
                   <option value="">Select Vendor</option>

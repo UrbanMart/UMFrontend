@@ -13,13 +13,12 @@ const App = () => {
   const [editingInventory, setEditingInventory] = useState(null);
   const [newInventory, setNewInventory] = useState({
     name: '',
-    price: '',
-    category: '',
     quantity: '',
     reorderLevel: '',
     vendorId: ''
   });
-
+  const [products, setProducts] = useState([]);
+  const [vendors, setVendors] = useState([]);
   const user = JSON.parse(localStorage.getItem('user'));
 
   const fetchInventories = async () => {
@@ -33,7 +32,18 @@ const App = () => {
 
   useEffect(() => {
     fetchInventories();
+    fetchProducts();
+    fetchVendors();
   }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/products`);
+      setProducts(response.data);
+    } catch (error) {
+      
+    }
+  };
 
   // Handle form input change
   const handleInputChange = (e) => {
@@ -80,6 +90,17 @@ const App = () => {
     }
   };
 
+  const fetchVendors = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/users`);
+      const vendorUsers = response.data.filter((user) => user.role === 'Vendor');
+      setVendors(vendorUsers);
+    } catch (error) {
+      console.error('Error fetching vendors:', error);
+    }
+  };
+
+
   return (
     <div className="app-container">
       <Navbar/>
@@ -99,8 +120,6 @@ const App = () => {
               <thead>
                 <tr>
                   <th>Name</th>
-                  <th>Price</th>
-                  <th>Category</th>
                   <th>Quantity</th>
                   <th>Reorder Level</th>
                   <th>Vendor ID</th>
@@ -111,8 +130,6 @@ const App = () => {
                 {inventories.map((inventory) => (
                   <tr key={inventory.id}>
                     <td>{inventory.name}</td>
-                    <td>{inventory.price}</td>
-                    <td>{inventory.category}</td>
                     <td>{inventory.quantity}</td>
                     <td>{inventory.reorderLevel}</td>
                     <td>{inventory.vendorId}</td>
@@ -138,36 +155,20 @@ const App = () => {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group>
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  value={newInventory.name}
-                  onChange={handleInputChange}
-                />
+            <Form.Group>
+              <Form.Label>Product Name</Form.Label>
+              <Form.Select
+                name="name"
+                value={newInventory.name}
+                onChange={handleInputChange}
+              >
+                {products.map((product) => (
+                  <option key={product.id} value={product.name}>
+                    {product.name}
+                  </option>
+                ))}
+              </Form.Select>
               </Form.Group>
-
-              <Form.Group>
-                <Form.Label>Price</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="price"
-                  value={newInventory.price}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label>Category</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="category"
-                  value={newInventory.category}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-
               <Form.Group>
                 <Form.Label>Quantity</Form.Label>
                 <Form.Control
@@ -190,12 +191,18 @@ const App = () => {
 
               <Form.Group>
                 <Form.Label>Vendor ID</Form.Label>
-                <Form.Control
+                <Form.Select
                   type="text"
                   name="vendorId"
                   value={newInventory.vendorId}
                   onChange={handleInputChange}
-                />
+                >
+                   {vendors.map((vendor) => (
+                   <option key={vendor.id} value={vendor.id}>
+                   {vendor.name}
+                 </option>
+                ))}
+                </Form.Select>
               </Form.Group>
             </Form>
           </Modal.Body>
