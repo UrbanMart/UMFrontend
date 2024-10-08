@@ -15,10 +15,9 @@ const VendorFeedback = () => {
   }, []);
 
  
-  const vendorId = '123456789012345678901234'; 
   const fetchFeedbacks = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/VendorFeedback/vendor/${vendorId}`);
+      const response = await axios.get(`${API_BASE_URL}/api/VendorFeedback/all`);
       setFeedbacks(response.data);
     } catch (error) {
       
