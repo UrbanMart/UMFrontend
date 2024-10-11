@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { API_BASE_URL } from '../../config';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
-import './Inventory.css'; 
+import './Inventory.css';
 
 const App = () => {
   const [inventories, setInventories] = useState([]);
@@ -13,6 +13,7 @@ const App = () => {
   const [editingInventory, setEditingInventory] = useState(null);
   const [newInventory, setNewInventory] = useState({
     name: '',
+    productId: '', // Add productId to the state
     quantity: '',
     reorderLevel: '',
     vendorId: ''
@@ -41,7 +42,7 @@ const App = () => {
       const response = await axios.get(`${API_BASE_URL}/api/products`);
       setProducts(response.data);
     } catch (error) {
-      
+      console.error('Error fetching products:', error);
     }
   };
 
@@ -57,6 +58,13 @@ const App = () => {
       await axios.post(`${API_BASE_URL}/api/ProductInventory`, newInventory);
       setShowModal(false);
       fetchInventories(); // Refresh the inventory list
+      setNewInventory({
+        name: '',
+        productId: '', // Reset productId
+        quantity: '',
+        reorderLevel: '',
+        vendorId: ''
+      }); // Reset form fields
     } catch (error) {
       console.error('Error adding inventory:', error);
     }
@@ -75,6 +83,13 @@ const App = () => {
       await axios.put(`${API_BASE_URL}/api/ProductInventory/${editingInventory.id}`, newInventory);
       setShowModal(false);
       fetchInventories(); // Refresh the inventory list
+      setNewInventory({
+        name: '',
+        productId: '', // Reset productId
+        quantity: '',
+        reorderLevel: '',
+        vendorId: ''
+      }); // Reset form fields
     } catch (error) {
       console.error('Error updating inventory:', error);
     }
@@ -84,7 +99,7 @@ const App = () => {
   const deleteInventory = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/ProductInventory/${id}`);
-      fetchInventories(); 
+      fetchInventories();
     } catch (error) {
       console.error('Error deleting inventory:', error);
     }
@@ -100,14 +115,11 @@ const App = () => {
     }
   };
 
-
   return (
     <div className="app-container">
-      <Navbar/>
-     
+      <Navbar />
       <Container className="flex-grow-1">
         <Row>
-
           <Col className="text-center my-4">
             <Button onClick={() => setShowModal(true)} style={{ float: "left" }}>
               Add New Inventory
@@ -120,6 +132,7 @@ const App = () => {
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Product ID</th> {/* Add Product ID to the header */}
                   <th>Quantity</th>
                   <th>Reorder Level</th>
                   <th>Vendor ID</th>
@@ -130,6 +143,7 @@ const App = () => {
                 {inventories.map((inventory) => (
                   <tr key={inventory.id}>
                     <td>{inventory.name}</td>
+                    <td>{inventory.productId}</td> {/* Display Product ID */}
                     <td>{inventory.quantity}</td>
                     <td>{inventory.reorderLevel}</td>
                     <td>{inventory.vendorId}</td>
@@ -155,19 +169,33 @@ const App = () => {
           </Modal.Header>
           <Modal.Body>
             <Form>
-            <Form.Group>
-              <Form.Label>Product Name</Form.Label>
-              <Form.Select
-                name="name"
-                value={newInventory.name}
-                onChange={handleInputChange}
-              >
-                {products.map((product) => (
-                  <option key={product.id} value={product.name}>
-                    {product.name}
-                  </option>
-                ))}
-              </Form.Select>
+              <Form.Group>
+                <Form.Label>Product Name</Form.Label>
+                <Form.Select
+                  name="name"
+                  value={newInventory.name}
+                  onChange={handleInputChange}
+                >
+                  {products.map((product) => (
+                    <option key={product.id} value={product.name}>
+                      {product.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Product ID</Form.Label> {/* New field for Product ID */}
+                <Form.Select
+                  name="productId"
+                  value={newInventory.productId}
+                  onChange={handleInputChange}
+                >
+                  {products.map((product) => (
+                    <option key={product.id} value={product.id}>
+                      {product.name}
+                    </option>
+                  ))}
+                </Form.Select>
               </Form.Group>
               <Form.Group>
                 <Form.Label>Quantity</Form.Label>
@@ -197,11 +225,11 @@ const App = () => {
                   value={newInventory.vendorId}
                   onChange={handleInputChange}
                 >
-                   {vendors.map((vendor) => (
-                   <option key={vendor.id} value={vendor.id}>
-                   {vendor.name}
-                 </option>
-                ))}
+                  {vendors.map((vendor) => (
+                    <option key={vendor.id} value={vendor.id}>
+                      {vendor.name}
+                    </option>
+                  ))}
                 </Form.Select>
               </Form.Group>
             </Form>
@@ -219,7 +247,6 @@ const App = () => {
           </Modal.Footer>
         </Modal>
       </Container>
-     
       <Footer />
     </div>
   );
