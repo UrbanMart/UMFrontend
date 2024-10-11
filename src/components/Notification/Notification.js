@@ -1,35 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Container, Row, Col, Table, Button, Modal, Form } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { API_BASE_URL } from '../../config';
-import Footer from '../Footer/Footer';
-import Navbar from '../Navbar/Navbar';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Container,
+  Row,
+  Col,
+  Table,
+  Button,
+  Modal,
+  Form,
+} from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { API_BASE_URL } from "../../config";
+import Footer from "../Footer/Footer";
+import Navbar from "../Navbar/Navbar";
 
 const NotificationManagement = () => {
   const [notifications, setNotifications] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingNotification, setEditingNotification] = useState(null);
+  const [users, setUsers] = useState([]);
   const [newNotification, setNewNotification] = useState({
-    userId: '',
-    message: '',
+    userId: "",
+    message: "",
     isRead: false,
-    type: '',
-    relatedOrderId: '',
+    type: "",
+    relatedOrderId: "",
   });
 
-  // Fetch all notifications
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const fetchNotifications = async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/api/notifications`);
       setNotifications(response.data);
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/users`);
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
     }
   };
 
   useEffect(() => {
     fetchNotifications();
+    fetchUsers();
   }, []);
 
   // Handle form input changes
@@ -45,7 +65,7 @@ const NotificationManagement = () => {
       setShowModal(false);
       fetchNotifications();
     } catch (error) {
-      console.error('Error adding notification:', error);
+      console.error("Error adding notification:", error);
     }
   };
 
@@ -59,11 +79,14 @@ const NotificationManagement = () => {
   // Update existing notification
   const updateNotification = async () => {
     try {
-      await axios.put(`${API_BASE_URL}/api/notifications/${editingNotification.id}`, newNotification);
+      await axios.put(
+        `${API_BASE_URL}/api/notifications/${editingNotification.id}`,
+        newNotification
+      );
       setShowModal(false);
       fetchNotifications();
     } catch (error) {
-      console.error('Error updating notification:', error);
+      console.error("Error updating notification:", error);
     }
   };
 
@@ -73,9 +96,45 @@ const NotificationManagement = () => {
       await axios.delete(`${API_BASE_URL}/api/notifications/${id}`);
       fetchNotifications();
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error("Error deleting notification:", error);
     }
   };
+
+  const filteredNotifications = notifications.filter((notification) => {
+    if (user.role === "Vendor") {
+      return notification.type === "Restock";
+    } else if (user.role === "CSR") {
+      return (
+        notification.type === "Delivery" ||
+        notification.type === "OrderCancellation" ||
+        notification.type === "CancellationApproval"
+      );
+    } 
+    else {
+      return true; 
+    }
+  });
+
+  // Approve a notification
+  const approveNotification = async (id) => {
+    try {
+      // Send the request to approve the cancellation
+      const response = await axios.put(`${API_BASE_URL}/api/Orders/${id}/approve-cancellation`, {});
+      
+      if (response.status === 200) {
+        // Assuming 200 status means success
+        alert(`Order ${id} cancellation has been successfully approved.`);
+      } else {
+        alert(`Approval of order ${id} cancellation encountered an issue.`);
+      }
+  
+      fetchNotifications();
+    } catch (error) {
+      console.error("Error approving notification:", error);
+      alert(`Error approving order ${id} cancellation: ${error.message}`);
+    }
+  };
+  
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -83,7 +142,10 @@ const NotificationManagement = () => {
       <Container className="flex-grow-1">
         <Row className="mt-4">
           <Col className="text-center">
-            <Button onClick={() => setShowModal(true)} style={{ float: 'left', marginBottom:"10px" }}>
+            <Button
+              onClick={() => setShowModal(true)}
+              style={{ float: "left", marginBottom: "10px" }}
+            >
               Add New Notification
             </Button>
           </Col>
@@ -101,22 +163,49 @@ const NotificationManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {notifications.map((notification) => (
-                  <tr key={notification.id}>
-                    <td>{notification.userId}</td>
-                    <td>{notification.message}</td>
-                    <td>{notification.isRead ? 'Read' : 'Unread'}</td>
-                    <td>{notification.type}</td>
-                    <td>
-                      <Button variant="warning" onClick={() => editNotification(notification)}>
-                        Edit
-                      </Button>{' '}
-                      <Button variant="danger" onClick={() => deleteNotification(notification.id)}>
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+                {filteredNotifications.map((notification) => {
+                  // Extract the order ID from the message using a regular expression
+                  const orderIdMatch =
+                    notification.message.match(/order (\w+)/);
+                  const orderId = orderIdMatch ? orderIdMatch[1] : null;
+
+                  return (
+                    <tr key={notification.id}>
+                      <td>{notification.userId}</td>
+                      <td>{notification.message}</td>
+                      <td>{notification.isRead ? "Read" : "Unread"}</td>
+                      <td>{notification.type}</td>
+                      <td>
+                        {notification.type === "OrderCancellation" &&
+                        orderId ? (
+                          <Button
+                            variant="success"
+                            onClick={() => approveNotification(orderId)}
+                          >
+                            Approve
+                          </Button>
+                        ) : (
+                          <>
+                            <Button
+                              variant="warning"
+                              onClick={() => editNotification(notification)}
+                            >
+                              Edit
+                            </Button>{" "}
+                            <Button
+                              variant="danger"
+                              onClick={() =>
+                                deleteNotification(notification.id)
+                              }
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </Table>
           </Col>
@@ -125,7 +214,9 @@ const NotificationManagement = () => {
         {/* Modal for Adding/Editing Notification */}
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{editingNotification ? 'Edit Notification' : 'Add Notification'}</Modal.Title>
+            <Modal.Title>
+              {editingNotification ? "Edit Notification" : "Add Notification"}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -155,7 +246,12 @@ const NotificationManagement = () => {
                   type="checkbox"
                   name="isRead"
                   checked={newNotification.isRead}
-                  onChange={(e) => setNewNotification((prev) => ({ ...prev, isRead: e.target.checked }))}
+                  onChange={(e) =>
+                    setNewNotification((prev) => ({
+                      ...prev,
+                      isRead: e.target.checked,
+                    }))
+                  }
                   label="Mark as read"
                 />
               </Form.Group>
@@ -185,8 +281,13 @@ const NotificationManagement = () => {
             <Button variant="secondary" onClick={() => setShowModal(false)}>
               Close
             </Button>
-            <Button variant="primary" onClick={editingNotification ? updateNotification : addNotification}>
-              {editingNotification ? 'Update Notification' : 'Add Notification'}
+            <Button
+              variant="primary"
+              onClick={
+                editingNotification ? updateNotification : addNotification
+              }
+            >
+              {editingNotification ? "Update Notification" : "Add Notification"}
             </Button>
           </Modal.Footer>
         </Modal>
