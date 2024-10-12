@@ -90,10 +90,18 @@ const OrderManagement = () => {
 
   // Edit existing order
   const editOrder = (order) => {
+    // Format the orderDate to YYYY-MM-DD
+    const formattedOrderDate = new Date(order.orderDate).toISOString().split('T')[0];
+  
+    // Set the formatted orderDate in the newOrder object
     setEditingOrder(order);
-    setNewOrder(order);
+    setNewOrder({
+      ...order,
+      orderDate: formattedOrderDate, // Set the formatted date
+    });
     setShowModal(true);
   };
+  
 
   // Update existing order
   const updateOrder = async () => {
@@ -163,14 +171,14 @@ const OrderManagement = () => {
                       <Button
                         variant="warning"
                         onClick={() => editOrder(order)}
-                        disabled={order.status === 'Dispatched' || order.status === 'Delivered'}
+                        disabled={order.status === 'Dispatched' || order.status === 'Delivered' || order.status === 'Cancelled'}
                       >
                         Edit
                       </Button>{' '}
                       <Button
                         variant="danger"
                         onClick={() => deleteOrder(order.id)}
-                        disabled={order.status === 'Dispatched' || order.status === 'Delivered'}
+                        disabled={order.status === 'Dispatched' || order.status === 'Delivered' || order.status === 'Cancelled'}
                       >
                         Delete
                       </Button>
