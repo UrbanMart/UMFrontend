@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import logo from '../../Assets/logo.png';
 import "../../components/Navbar/Navbar.css";
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar() {
 
@@ -9,16 +9,16 @@ function Navbar() {
   const user = JSON.parse(localStorage.getItem('user'));
 
   const handleLogout = () => {
-    localStorage.removeItem('user'); 
-    navigate('/');  
+    localStorage.removeItem('user');
+    navigate('/');
   };
 
   return (
     <nav className="navbar navbar-light navbar-expand" style={{ backgroundColor: '#e3f2fd', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
       <div className="container-fluid d-flex justify-content-between align-items-center">
-        <a className="navbar-brand" href="#" style={{ marginLeft:'50px' }}>
+        <a className="navbar-brand" href="#" style={{ marginLeft: '50px' }}>
           <Link to="/">
-            <img src={logo} style={{ width: "200px", boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} alt="logo" />
+            <img src={logo} style={{ width: "200px" }} alt="logo" />
           </Link>
         </a>
         <ul className="navbar-nav d-flex align-items-center" style={{ marginRight: '50px' }}>
