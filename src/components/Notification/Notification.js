@@ -18,7 +18,7 @@ const NotificationManagement = () => {
   const [notifications, setNotifications] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingNotification, setEditingNotification] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [newNotification, setNewNotification] = useState({
     userId: "",
     message: "",
@@ -38,18 +38,9 @@ const NotificationManagement = () => {
     }
   };
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/api/users`);
-      setUsers(response.data);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
   useEffect(() => {
     fetchNotifications();
-    fetchUsers();
+    fetchOrders();
   }, []);
 
   // Handle form input changes
@@ -109,9 +100,9 @@ const NotificationManagement = () => {
         notification.type === "OrderCancellation" ||
         notification.type === "CancellationApproval"
       );
-    } 
+    }
     else {
-      return true; 
+      return true;
     }
   });
 
@@ -119,22 +110,34 @@ const NotificationManagement = () => {
   const approveNotification = async (id) => {
     try {
       // Send the request to approve the cancellation
-      const response = await axios.put(`${API_BASE_URL}/api/Orders/${id}/approve-cancellation`, {});
-      
-      if (response.status === 200) {
-        // Assuming 200 status means success
-        alert(`Order ${id} cancellation has been successfully approved.`);
-      } else {
-        alert(`Approval of order ${id} cancellation encountered an issue.`);
+      const response = await axios.put(`${API_BASE_URL}/api/Orders/${id}/approve-cancellation`);
+
+      if (response.status === 204) {
+        console.log(`Order ${id} cancellation approved successfully.`);
+
+        // Update the orders state to mark this order as cancelled
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === id ? { ...order, status: "Cancelled" } : order
+          )
+        );
       }
-  
-      fetchNotifications();
     } catch (error) {
       console.error("Error approving notification:", error);
       alert(`Error approving order ${id} cancellation: ${error.message}`);
     }
   };
-  
+
+  // Fetch all orders
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/Orders`);
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -164,10 +167,10 @@ const NotificationManagement = () => {
               </thead>
               <tbody>
                 {filteredNotifications.map((notification) => {
-                  // Extract the order ID from the message using a regular expression
-                  const orderIdMatch =
-                    notification.message.match(/order (\w+)/);
+                  const orderIdMatch = notification.message.match(/order (\w+)/);
                   const orderId = orderIdMatch ? orderIdMatch[1] : null;
+
+                  const relatedOrder = orders.find((order) => order.id === orderId);
 
                   return (
                     <tr key={notification.id}>
@@ -176,14 +179,19 @@ const NotificationManagement = () => {
                       <td>{notification.isRead ? "Read" : "Unread"}</td>
                       <td>{notification.type}</td>
                       <td>
-                        {notification.type === "OrderCancellation" &&
-                        orderId ? (
-                          <Button
-                            variant="success"
-                            onClick={() => approveNotification(orderId)}
-                          >
-                            Approve
-                          </Button>
+                        {notification.type === "OrderCancellation" && orderId ? (
+                          relatedOrder?.status === "Cancelled" ? (
+                            <Button variant="danger" disabled>
+                              Cancelled
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="success"
+                              onClick={() => approveNotification(orderId)}
+                            >
+                              Approve
+                            </Button>
+                          )
                         ) : (
                           <>
                             <Button
@@ -194,9 +202,7 @@ const NotificationManagement = () => {
                             </Button>{" "}
                             <Button
                               variant="danger"
-                              onClick={() =>
-                                deleteNotification(notification.id)
-                              }
+                              onClick={() => deleteNotification(notification.id)}
                             >
                               Delete
                             </Button>
@@ -207,6 +213,8 @@ const NotificationManagement = () => {
                   );
                 })}
               </tbody>
+
+
             </Table>
           </Col>
         </Row>
