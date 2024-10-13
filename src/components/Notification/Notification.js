@@ -138,6 +138,22 @@ const NotificationManagement = () => {
     }
   };
 
+  const markAsRead = async (id) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/api/notifications/${id}/read`);
+      if (response.status === 204) {
+        console.log(`Notification ${id} marked as read.`);
+        // Update local state to reflect that the notification is read
+        setNotifications((prevNotifications) =>
+          prevNotifications.map((notif) =>
+            notif.id === id ? { ...notif, isRead: true } : notif
+          )
+        );
+      }
+    } catch (error) {
+      console.error(`Error marking notification ${id} as read:`, error);
+    }
+  };
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -205,6 +221,13 @@ const NotificationManagement = () => {
                               onClick={() => deleteNotification(notification.id)}
                             >
                               Delete
+                            </Button>
+                            <Button
+                              variant={notification.isRead ? "danger" : "success"}
+                              onClick={() => markAsRead(notification.id)}
+                              disabled={notification.isRead}
+                            >
+                              {notification.isRead ? "Marked as Read" : "Mark as Read"}
                             </Button>
                           </>
                         )}

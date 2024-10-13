@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from '../../Assets/logo.png';
 import "../../components/Navbar/Navbar.css";
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function Navbar() {
 
@@ -13,44 +13,81 @@ function Navbar() {
     navigate('/');
   };
 
+  const linkStyle = {
+    fontSize: "large",
+    fontWeight: "bold",
+    marginRight: '30px',
+    textDecoration: 'none'
+  };
+
+  const activeLinkStyle = {
+    ...linkStyle,
+    color: '#007bff', // Active link color
+    borderBottom: '2px solid #007bff' // Optional: underline the active link
+  };
+
   return (
     <nav className="navbar navbar-light navbar-expand" style={{ backgroundColor: '#e3f2fd', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
       <div className="container-fluid d-flex justify-content-between align-items-center">
         <a className="navbar-brand" href="#" style={{ marginLeft: '50px' }}>
-          <Link to="/">
+          <NavLink to="/">
             <img src={logo} style={{ width: "200px" }} alt="logo" />
-          </Link>
+          </NavLink>
         </a>
         <ul className="navbar-nav d-flex align-items-center" style={{ marginRight: '50px' }}>
           <li className="nav-item">
-            <a className="nav-link" href="/product" style={{ fontSize: "large", fontWeight: "bold", marginRight: '30px' }}>
+            <NavLink
+              to="/product"
+              className="nav-link"
+              style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+            >
               PRODUCTS
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/inventory" style={{ fontSize: "large", fontWeight: "bold", marginRight: '30px' }}>
+            <NavLink
+              to="/inventory"
+              className="nav-link"
+              style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+            >
               INVENTORY
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/order" style={{ fontSize: "large", fontWeight: "bold", marginRight: '30px' }}>
+            <NavLink
+              to="/order"
+              className="nav-link"
+              style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+            >
               ORDERS
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/notification" style={{ fontSize: "large", fontWeight: "bold", marginRight: '30px' }}>
+            <NavLink
+              to="/notification"
+              className="nav-link"
+              style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+            >
               NOTIFICATIONS
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/feedback" style={{ fontSize: "large", fontWeight: "bold", marginRight: '30px' }}>
+            <NavLink
+              to="/feedback"
+              className="nav-link"
+              style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+            >
               FEEDBACKS
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/user" style={{ fontSize: "large", fontWeight: "bold", marginRight: '30px' }}>
+            <NavLink
+              to="/user"
+              className="nav-link"
+              style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}
+            >
               USERS
-            </a>
+            </NavLink>
           </li>
           {user ? (
             <>
@@ -71,9 +108,9 @@ function Navbar() {
             </>
           ) : (
             <li className="nav-item">
-              <Link to="/login" className="nav-link" style={{ fontSize: "large", fontWeight: "bold", marginRight: '100px' }}>
+              <NavLink to="/login" className="nav-link" style={({ isActive }) => (isActive ? activeLinkStyle : linkStyle)}>
                 LOGIN
-              </Link>
+              </NavLink>
             </li>
           )}
         </ul>
