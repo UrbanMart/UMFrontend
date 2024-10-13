@@ -223,10 +223,11 @@ const NotificationManagement = () => {
                               Delete
                             </Button>
                             <Button
-                              variant={notification.isRead ? "danger" : "success"} // Change color based on read status
+                              variant={notification.isRead ? "danger" : "success"}
                               onClick={() => markAsRead(notification.id)}
+                              disabled={notification.isRead}
                             >
-                              {notification.isRead ? "Marked as Read" : "Mark as Read"} {/* Change text based on read status */}
+                              {notification.isRead ? "Marked as Read" : "Mark as Read"}
                             </Button>
                           </>
                         )}
